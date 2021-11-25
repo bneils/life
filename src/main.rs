@@ -23,7 +23,6 @@ fn main() {
     let mut life = Cells::new();
     let mut running = false;
     let mut has_deployed = false;
-    //toad(&mut life);
 
     let hz = 5;
     let mut fov = 60.0;

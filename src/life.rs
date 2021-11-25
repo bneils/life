@@ -32,33 +32,33 @@ impl Cells {
         }
     }
 
-    pub fn display(&self, center: Point<f64>, fov: f64, canvas: &mut Canvas<Window>) {
+    pub fn display(&self, center: Point<isize>, fov: f64, canvas: &mut Canvas<Window>) {
         let (total_x, total_y) = canvas.window().size();
-        let len = total_x as f64 / fov;
-        let offset = Point { x: total_x as f64 / 2.0 - center.x, y: total_y as f64 / 2.0 - center.y };
+        let len = (total_x as f64 / fov) as isize;
+        let offset = Point {
+            x: total_x as isize / 2 - center.x,
+            y: total_y as isize / 2 - center.y
+        };
 
-        // start/stop
-        // find beginning of first cell
-        // find stop of last cell
         canvas.set_draw_color(Color::RGB(255, 255, 255));
         canvas.clear();
-        canvas.set_draw_color(Color::RGB(0, 0, 0));
         for pt in &self.pts {
-            let x = (pt.x as f64 * len + offset.x) as i32;
-            let y = (pt.y as f64 * len + offset.y) as i32;
+            let x = (pt.x * (len + 1) + offset.x) as i32;
+            let y = (pt.y * (len + 1) + offset.y) as i32;
+            canvas.set_draw_color(Color::RGB(0, 0, 0));
             canvas.fill_rect(Rect::new(x, y, len as u32, len as u32)).unwrap();
         }
         canvas.set_draw_color(Color::RGB(100, 100, 100));
         
-        let mut i = -(center.x as f64 % len);
-        while i < total_x as f64 {
+        let mut i = (offset.x - 1) % (len + 1);
+        while i < total_x as isize {
             canvas.fill_rect(rect::Rect::new(i as i32, 0, 1, total_y)).unwrap();
-            i += len;
+            i += len + 1;
         }
-        let mut i = -(center.y as f64 % len);
-        while i < total_y as f64 {
+        let mut i = (offset.y - 1) % (len + 1);
+        while i < total_y as isize {
             canvas.fill_rect(rect::Rect::new(0, i as i32, total_x, 1)).unwrap();
-            i += len;
+            i += len + 1;
         }
     }
 

@@ -3,8 +3,6 @@ use life::{Cells, Point};
 
 extern crate sdl2;
 use sdl2::event::Event;
-use sdl2::pixels::Color;
-use sdl2::rect;
 use sdl2::keyboard::Scancode;
 use std::thread;
 use std::time::{Instant, Duration};
@@ -114,15 +112,15 @@ fn main() {
     pulsar(&mut life);
 
     let hz = 7;
-    let fov = 60.0;
-    let mut center = Point { x: 0.0, y: 0.0 };
+    let mut fov = 60.0;
+    let mut center = Point { x: 0, y: 0 };
     let mut last_game_tick = Instant::now();
 
     life.display(center, fov, &mut canvas);
     canvas.present();
 
     let mut mouse_down = false;
-    
+
     loop {
         canvas.clear();
         for event in event_pump.poll_iter() {
@@ -132,8 +130,8 @@ fn main() {
                 Event::MouseButtonUp { .. } => mouse_down = false,
                 Event::MouseMotion { xrel, yrel, .. } => {
                     if mouse_down {
-                        center.x -= xrel as f64;
-                        center.y -= yrel as f64;
+                        center.x -= xrel as isize;
+                        center.y -= yrel as isize;
                     }
                 },
                 _ => {},
@@ -143,12 +141,12 @@ fn main() {
         let lctrl_pressed = event_pump.keyboard_state().is_scancode_pressed(Scancode::LCtrl);
 
         if last_game_tick.elapsed().as_millis() >= 1000 / hz {
-            life.update();
+        //    life.update();
             last_game_tick = Instant::now();
         }
 
         life.display(center, fov, &mut canvas);
         canvas.present();
-        thread::sleep(Duration::from_millis(1000 / 100));
+        thread::sleep(Duration::from_millis(1000 / 60));
     }
 }

@@ -32,6 +32,22 @@ impl Cells {
         }
     }
 
+    pub fn pixel_to_cell_coord(scr: Point<isize>, center: Point<isize>, fov: f64, canvas: &mut Canvas<Window>) -> Point<isize> {
+        // x = pt.x * (len+1) + offset.x
+        // pt.x = (x - offset.x) / (len + 1)
+        let (total_x, total_y) = canvas.window().size();
+        let len = (total_x as f64 / fov) as isize;
+        let offset = Point {
+            x: total_x as isize / 2 - center.x,
+            y: total_y as isize / 2 - center.y
+        };
+
+        let x = ((scr.x - offset.x) as f64 / (len + 1) as f64).floor() as isize;
+        let y = ((scr.y - offset.y) as f64 / (len + 1) as f64).floor() as isize;
+
+        Point { x, y }
+    }
+
     pub fn display(&self, center: Point<isize>, fov: f64, canvas: &mut Canvas<Window>) {
         let (total_x, total_y) = canvas.window().size();
         let len = (total_x as f64 / fov) as isize;
@@ -48,7 +64,7 @@ impl Cells {
             canvas.set_draw_color(Color::RGB(0, 0, 0));
             canvas.fill_rect(Rect::new(x, y, len as u32, len as u32)).unwrap();
         }
-        canvas.set_draw_color(Color::RGB(100, 100, 100));
+        canvas.set_draw_color(Color::RGB(150, 150, 150));
         
         let mut i = (offset.x - 1) % (len + 1);
         while i < total_x as isize {
@@ -66,6 +82,7 @@ impl Cells {
         let mut neighbor_counts: HashMap<Point<isize>, u8> = HashMap::new();
         // Increment neighbor count of surrounding cells
         for live_cell in &self.pts {
+            neighbor_counts.entry(*live_cell).or_insert(0u8);
             for x in live_cell.x - 1..live_cell.x + 2 {
                 for y in live_cell.y - 1..live_cell.y + 2 {
                     if y != live_cell.y || x != live_cell.x {

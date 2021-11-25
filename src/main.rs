@@ -8,15 +8,6 @@ use std::thread;
 use std::time::{Instant, Duration};
 use std::collections::HashSet;
 
-fn toad(cells: &mut Cells) {
-    cells.pts.insert(Point { x: 2, y: 2 });
-    cells.pts.insert(Point { x: 3, y: 2 });
-    cells.pts.insert(Point { x: 4, y: 2 });
-    cells.pts.insert(Point { x: 1, y: 3 });
-    cells.pts.insert(Point { x: 2, y: 3 });
-    cells.pts.insert(Point { x: 3, y: 3 });
-}
-
 fn main() {
     let _sdl = sdl2::init().unwrap();
     let video_subsystem = _sdl.video().unwrap();
@@ -26,7 +17,6 @@ fn main() {
         .unwrap();
 
     let mut canvas = video.into_canvas().build().unwrap();
-    let (canvas_width, canvas_height) = canvas.output_size().unwrap();
 
     let mut event_pump = _sdl.event_pump().unwrap();
 

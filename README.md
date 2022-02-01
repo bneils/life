@@ -1,12 +1,19 @@
 # life
 
-Conway's Game of Life written in Rust, taking adjantage of Simple DirectMedia Layer.
+Conway's Game of Life written in Rust, taking advantage of Simple DirectMedia Layer.
 
 # Features
 
 Scrolling capability
 
-# WIP
+Ability to use the sandbox
 
-- Cohesive graphics
-- Ability to sandbox the grid
+# Keys
+
+S = start
+
+R = reset
+
+P = pause
+
+Ctrl-Click = toggle cell
